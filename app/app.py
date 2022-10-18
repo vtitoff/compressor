@@ -1,4 +1,5 @@
-from utils import FileHandler, Compressor, Extractor, Parser, Decorator, logger
+from utils import FileHandler, Extractor, Parser, Decorator, logger
+from compressor import CompressController, RLECompressor
 
 if __name__ == "__main__":
     parser = Parser()
@@ -6,4 +7,6 @@ if __name__ == "__main__":
     file_path, compress_rate = args.file, args.cr
     fl = FileHandler()
     file = fl.get_file(file_path)
-    print(file)
+    compress_controller = CompressController(RLECompressor())
+    compress_file = compress_controller.compress(file)
+    print(compress_file)

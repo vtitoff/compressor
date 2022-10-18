@@ -3,6 +3,7 @@ from typing import TextIO, Dict, List, Tuple, Union, BinaryIO
 import constants
 import traceback
 import logging
+import abc
 
 logging.basicConfig(level="DEBUG")
 logger = logging.getLogger("compressor")
@@ -28,10 +29,6 @@ class FileHandler:
     def get_file(self, path: str) -> bytes:
         with open(file=path, mode="rb", buffering=0) as file:
             return file.read()
-
-
-class Compressor:
-    pass
 
 
 class Extractor:
