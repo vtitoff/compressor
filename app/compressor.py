@@ -14,39 +14,41 @@ class Compressor(metaclass=abc.ABCMeta):
 
 class RLECompressor(Compressor):
     def compress(self, file: bytes) -> bytes:
-        compress_file = b""
-        num = str(1).encode("utf-8")
-        byte = "ssssss".encode("utf-8")
-        compress_file += num
-        compress_file += byte
-        logger.debug(compress_file)
+        # compress_file = b""
+        # num = str(1).encode("utf-8")
+        # byte = file.encode("utf-8")
+        # compress_file += num
+        # compress_file += byte
+        compress_file = self.alghoritm(file)
+        logger.debug(type(compress_file))
+        return compress_file
 
     def alghoritm(self, data):
-        s = "AAAABBBCCDDEFFXXXXXXXX"
-        temp = s[0]
+        temp = data[0]
         count = 1
         answer = []
-        for i in range(1, len(s)):
-            if s[i] == temp:
+        for i in range(1, len(data)):
+            if data[i] == temp:
                 count += 1
             else:
                 if count > 1:
                     answer.append(f"{count}{temp}")
-                    temp = s[i]
+                    temp = data[i]
                     count = 1
                 else:
-                    answer.append(temp)
-                    temp = s[i]
+                    answer.append(f"{count}{temp}")
+                    temp = data[i]
                     count = 1
         if count > 1:
             answer.append(f"{count}{temp}")
-            temp = s[i]
+            temp = data[i]
             count = 1
         else:
-            answer.append(temp)
-            temp = s[i]
+            answer.append(f"{count}{temp}")
+            temp = data[i]
             count = 1
-        print("".join(answer))
+        compress_file = "".join(answer)
+        return compress_file.encode('utf-8')
 
 
 class CompressController:
@@ -57,4 +59,4 @@ class CompressController:
         pass
 
     def compress(self, file: bytes) -> bytes:
-        self.compressor.compress(file)
+        return self.compressor.compress(file)

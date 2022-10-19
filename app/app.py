@@ -9,4 +9,3 @@ if __name__ == "__main__":
     file = fl.get_file(file_path)
     compress_controller = CompressController(RLECompressor())
     compress_file = compress_controller.compress(file)
-    print(compress_file)
