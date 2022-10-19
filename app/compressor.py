@@ -2,53 +2,22 @@ import abc
 from typing import TextIO, Dict, List, Tuple, Union, BinaryIO
 import logging
 from utils import Decorator
+import zipfile
 
 logger = logging.getLogger("compressor")
 
 
 class Compressor(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def compress(self, file: bytes) -> bytes:
+    def compress(self, file: str, archive_name: str) -> None:
         pass
 
 
-class RLECompressor(Compressor):
-    def compress(self, file: bytes) -> bytes:
-        # compress_file = b""
-        # num = str(1).encode("utf-8")
-        # byte = file.encode("utf-8")
-        # compress_file += num
-        # compress_file += byte
-        compress_file = self.alghoritm(file)
-        logger.debug(type(compress_file))
-        return compress_file
-
-    def alghoritm(self, data):
-        temp = data[0]
-        count = 1
-        answer = []
-        for i in range(1, len(data)):
-            if data[i] == temp:
-                count += 1
-            else:
-                if count > 1:
-                    answer.append(f"{count}{temp}")
-                    temp = data[i]
-                    count = 1
-                else:
-                    answer.append(f"{count}{temp}")
-                    temp = data[i]
-                    count = 1
-        if count > 1:
-            answer.append(f"{count}{temp}")
-            temp = data[i]
-            count = 1
-        else:
-            answer.append(f"{count}{temp}")
-            temp = data[i]
-            count = 1
-        compress_file = "".join(answer)
-        return compress_file.encode('utf-8')
+class ZipCompressor(Compressor):
+    def compress(self, file: str, archive_name: str) -> None:
+        zip = zipfile.ZipFile(f'{archive_name}.zip', 'w')
+        zip.write(file, compress_type=zipfile.ZIP_DEFLATED, compresslevel=5)
+        zip.close()
 
 
 class CompressController:
@@ -58,5 +27,5 @@ class CompressController:
     def choice_compressor(self, compressor: Compressor) -> None:
         pass
 
-    def compress(self, file: bytes) -> bytes:
-        return self.compressor.compress(file)
+    def compress(self, path: str, archive_name: str) -> None:
+        self.compressor.compress(path, archive_name)

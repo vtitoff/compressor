@@ -30,6 +30,9 @@ class FileHandler:
         with open(file=path, mode="rb", buffering=0) as file:
             return file.read()
 
+    def write_file(self, file, file_name):
+        with open(file_name) as file:
+            file.write(file)
 
 class Extractor:
     pass
